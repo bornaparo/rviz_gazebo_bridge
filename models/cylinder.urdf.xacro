@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="cylinder">
+  <!-- Define parameters -->
+  <xacro:arg name="radius" default="0.5"/>
+  <xacro:arg name="height" default="1.0"/>
+  <xacro:arg name="mass" default="1"/>
+  
+  <xacro:property name="radius" value="$(arg radius)"/>  <!-- Default radius -->
+  <xacro:property name="height" value="$(arg height)"/>  <!-- Default height -->
+  <xacro:property name="mass" value="$(arg mass)"/>
+  <xacro:property name="perpendicular_inertia" value="${1/12 * mass * (3 * radius * radius + height * height)}" />
+  <xacro:property name="horizontal_inertia" value="${1/2 * mass * radius * radius}"/>
+
+  <link name="cylinder_link">
+    <!-- Visual representation -->
+    <visual>
+      <geometry>
+        <cylinder radius="${radius}" length="${height}"/>
+      </geometry>
+      <material name="Gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+
+    <!-- Collision geometry -->
+    <collision>
+      <geometry>
+        <cylinder radius="${radius}" length="${height}"/>
+      </geometry>
+    </collision>
+
+    <!-- Inertial properties -->
+    <inertial>
+      <mass value="${mass}"/>
+      <inertia ixx="${perpendicular_inertia}" ixy="0.0" ixz="0.0" iyy="${perpendicular_inertia}" iyz="0.0" izz="${horizontal_inertia}"/>
+    </inertial>
+  </link>
+</robot>

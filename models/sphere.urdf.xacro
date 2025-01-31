@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="sphere">
+
+  <xacro:arg name="radius" default="1"/>
+  <xacro:arg name="mass" default="1"/>
+
+  <!-- Define parameters with default values -->
+  <xacro:property name="radius" value="$(arg radius)"/> <!-- Radius of the sphere -->
+  <xacro:property name="mass" value="$(arg mass)"/>    <!-- Mass of the sphere -->
+
+  <!-- Inertial values -->
+  <xacro:property name="inertia" value="${2/5 * mass * radius * radius}"/>
+
+  <!-- Sphere Link -->
+  <link name="sphere_link">
+    <!-- Visual Element -->
+    <visual>
+      <geometry>
+        <sphere radius="${radius}"/>
+      </geometry>
+      <material name="Gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+
+    <!-- Collision Element -->
+    <collision>
+      <geometry>
+        <sphere radius="${radius}"/>
+      </geometry>
+    </collision>
+
+    <!-- Inertial Element -->
+    <inertial>
+      <mass value="${mass}"/>
+      <inertia ixx="${inertia}" ixy="0.0" ixz="0.0" iyy="${inertia}" iyz="0.0" izz="${inertia}"/>
+    </inertial>
+  </link>
+</robot>

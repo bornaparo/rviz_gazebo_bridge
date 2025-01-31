@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot name="box" xmlns:xacro="http://www.ros.org/wiki/xacro"> <!-- box is rectangle -->
+  <xacro:arg name="box_size" default="1 1 1"/> <!-- xsize ysize zsize -->
+  <xacro:property name="box_size" value="$(arg box_size)"/>
+  <xacro:arg name="mass" default="1"/>
+  <xacro:property name="mass" value="$(arg mass)"/>
+
+  <xacro:property name="x_dim" value="${box_size[0]}"/>
+  <xacro:property name="y_dim" value="${box_size[2]}"/>
+  <xacro:property name="z_dim" value="${box_size[4]}"/>
+  <xacro:property name="ixx" value="${1/12 * mass * (z_dim * z_dim + y_dim * y_dim)}"/>
+  <xacro:property name="iyy" value="${1/12 * mass * (x_dim * x_dim + z_dim * z_dim)}"/>
+  <xacro:property name="izz" value="${1/12 * mass * (x_dim * x_dim + y_dim * y_dim)}"/>
+
+  <link name="box_link">
+    <visual>
+      <geometry>
+        <box size="${box_size}"/>
+      </geometry>
+      <material name="Gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${box_size}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="${mass}"/>
+      <inertia ixx="${ixx}" ixy="0.0" ixz="0.0" iyy="${iyy}" iyz="0.0" izz="${izz}"/>
+    </inertial>
+  </link>
+</robot>
