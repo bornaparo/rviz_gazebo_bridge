@@ -8,6 +8,10 @@ static rclcpp::Logger LOGGER = rclcpp::get_logger("rviz_gazebo_bridge");
 
 RVizGazeboBridge::RVizGazeboBridge(const std::string& robot_name) : robot_name(robot_name)
 {
+}
+
+void RVizGazeboBridge::init() //stavio tu ovo iz konstruktora tako da objekt ove klase moze biti member varijabla druge klase bez da se koristi gazebo (a i da se koriste funkcije ove klase), potrebno mi za testiranje
+{
     std::string service_name = "/gazebo/worlds";
     ignition::transport::Node transport_node;
     ignition::msgs::Empty req;
@@ -28,8 +32,9 @@ RVizGazeboBridge::RVizGazeboBridge(const std::string& robot_name) : robot_name(r
         this->world_name = res.data(0);
         RCLCPP_INFO(LOGGER, "world_name is: %s", this->world_name.c_str());
     }
-};
 
+    this->is_initialized = true;
+}
 
 void RVizGazeboBridge::gazebo_spawn_sphere(const std::string& name, double radius, double x, double y, double z, double qx, double qy, double qz, double qw)
 {
@@ -143,6 +148,8 @@ int RVizGazeboBridge::spawn_xacro(const std::string& command, double x, double y
 
 void RVizGazeboBridge::load_from_rviz_to_gazebo() //takes all collision objects from motion planning scene and spawns them in gazebo
 {
+    if (!is_initialized) this->init();
+
     moveit::planning_interface::PlanningSceneInterface psi;
     const auto &collision_objects = psi.getObjects();
 
@@ -252,6 +259,8 @@ std::string RVizGazeboBridge::parse_filename_to_url(std::string filename)
 
 void RVizGazeboBridge::load_from_gazebo_to_rviz()
 {
+    if (!is_initialized) this->init();
+
     RCLCPP_INFO_STREAM(LOGGER, "Loading models from gazebo to moveit planning scene");
 
     ignition::transport::Node transport_node;

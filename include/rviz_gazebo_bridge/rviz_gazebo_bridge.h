@@ -51,10 +51,12 @@ private:
     void gazebo_spawn_box(const std::string& name, double x_dim, double y_dim, double z_dim, double x, double y, double z, double qx, double qy, double qz, double qw); //x y z dimensions (size), x y z (position to spawn) qx qy qz qw (orientation to spawn - quaternion)
     void gazebo_spawn_cylinder(const std::string& name, double radius, double height, double x, double y, double z, double qx, double qy, double qz, double qw);
     void gazebo_spawn_sphere(const std::string& name, double radius, double x, double y, double z, double qx, double qy, double qz, double qw);
+    void init();
     std::string parse_filename_to_url(std::string filename); 
 
     const std::string package_share_path = ament_index_cpp::get_package_share_directory("rviz_gazebo_bridge");
     const std::string robot_name;
     std::string world_name;
+    bool is_initialized = false;
 
 };
